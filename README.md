@@ -115,7 +115,33 @@ ___
 --------
 
 ~~~Java
-
+    public static HashSet<String> perebor(String n, int k){
+        HashSet<String> list = new HashSet<String>();
+        char[] c = n.toCharArray();
+        for (int i = 0; i < c.length; i++){
+            for (int j = i; j < c.length; j++) {
+                if (i != j){
+                    char newC = c[i];
+                    c[i] = c[j];
+                    c[j] = newC;
+                    String s = new String(c);
+                    list.add(s);
+                    newC = c[j];
+                    c[j] = c[i];
+                    c[i] = newC;
+                }
+            }
+        }
+        k--;
+        if (k>0){
+            HashSet<String> list_2 = new HashSet<String>();
+            for (String s : list){
+                list_2.addAll(perebor(s, k));
+            }
+            return list_2;
+        }
+        return list;
+    }
 ~~~
 
 Не проходит по времени (￢_￢)

@@ -1,6 +1,10 @@
 package com.company;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.HashSet;
+import java.util.List;
 
 public class Main {
 
@@ -40,11 +44,67 @@ public class Main {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
 
+        int[] loveNum = {5,6,10};
 
-        //writer.write("");
+        String n = reader.readLine();
+        int k = Integer.parseInt(reader.readLine());
+
+        HashSet<String> list = perebor(n, k);
+
+        for (String s : list){
+            System.out.println(s);
+        }
+
+        double rez = isLoveNum(list, loveNum);
+        Formatter formatter = new Formatter();
+        formatter.format("%.10f\n", rez);
+        System.out.println(formatter);
+
+        //writer.write(""+rez);
 
         reader.close();
         writer.close();
+    }
+
+    public static HashSet<String> perebor(String n, int k){
+        HashSet<String> list = new HashSet<String>();
+        char[] c = n.toCharArray();
+        for (int i = 0; i < c.length; i++){
+            for (int j = i; j < c.length; j++) {
+                if (i != j){
+                    char newC = c[i];
+                    c[i] = c[j];
+                    c[j] = newC;
+                    String s = new String(c);
+                    list.add(s);
+                    newC = c[j];
+                    c[j] = c[i];
+                    c[i] = newC;
+                }
+            }
+        }
+        k--;
+        if (k>0){
+            HashSet<String> list_2 = new HashSet<String>();
+            for (String s : list){
+                list_2.addAll(perebor(s, k));
+            }
+            return list_2;
+        }
+        return list;
+    }
+
+    public static double isLoveNum(HashSet<String> h, int[] k){
+        int countTrue = 0;
+        for (String s : h){
+            for (int i = 0; i < k.length; i++){
+                if ((Integer.parseInt(s) % k[i]) == 0){
+                    countTrue++;
+                    continue;
+                }
+            }
+        }
+        return (double )countTrue / (double )h.size();
     }
 
 }
